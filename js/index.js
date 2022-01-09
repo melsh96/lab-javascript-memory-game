@@ -1,3 +1,5 @@
+// ! DOM Manipulation File
+
 const cards = [
   { name: 'aquaman', img: 'aquaman.jpg' },
   { name: 'batman', img: 'batman.jpg' },
@@ -31,6 +33,7 @@ memoryGame.shuffleCards();
 window.addEventListener('load', (event) => {
   let html = '';
   memoryGame.cards.forEach((pic) => {
+    // Add html elements to loaded page - base
     html += `
       <div class="card" data-card-name="${pic.name}">
         <div class="back" name="${pic.img}"></div>
@@ -45,11 +48,13 @@ window.addEventListener('load', (event) => {
   // Bind the click event of each element to a function
   document.querySelectorAll('.card').forEach((card) => {
     card.addEventListener('click', () => {
+      // If only 1 card is selected
       if (memoryGame.pickedCards.length < 2) {
+        // Add 1 to picked card array
         memoryGame.pickedCards.push(card);
       }
 
-      // Turn selected card
+      // Add turned class when turned
       card.classList.add('turned');
 
       // If two cards selected, put array into two variables
@@ -60,35 +65,32 @@ window.addEventListener('load', (event) => {
         // Add 1 to pairs clicked count
         document.getElementById('pairs-clicked').innerHTML++;
 
-        // console.log(card1);
-        // console.log(card2);
-
         // If we found pairs
         if (memoryGame.checkIfPair(card1.innerHTML, card2.innerHTML)) {
           // Add 1 to pairs guessed
           document.getElementById('pairs-guessed').innerHTML++;
 
-          // Add block status to card so they are not guessed again
+          // ! Add block status to card so they are not guessed again
           card1.classList.add('blocked');
           card2.classList.add('blocked');
 
-          // Reset picked cards to be empty
+          // ! Reset picked cards to be empty
           memoryGame.pickedCards = [];
         } else {
-          // if cards are not pairs, remove turned class and reset array.
+          // ! if cards are not pairs, remove turned class and reset array.
           setTimeout(() => {
             card1.classList.remove('turned');
             card2.classList.remove('turned');
-          }, 1000);
+          }, 500); // Set time to flip rapidly the cards
 
           memoryGame.pickedCards = [];
         }
-        // if the game ends, alert a win message
+        // If the game ends, alert a win message
         if (memoryGame.checkIfFinished()) {
           alert('You won!');
         }
       }
-      console.log(`Card clicked: ${card}`);
+      //console.log(`Card clicked: ${card}`);
     });
   });
 });
